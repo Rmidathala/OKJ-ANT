@@ -3,7 +3,7 @@
 	
 
 	<property name="tests.gui.dir" value="./" />
-	<property name="testset.name" value="Production Regression" />
+	<property name="testset.name" value="Production Smoke" />
 	
 	<property name="javalibs.dir" value="${tests.gui.dir}\supportlibraries\External_Jars" />
 	
