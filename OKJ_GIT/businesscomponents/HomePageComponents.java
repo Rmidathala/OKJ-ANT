@@ -176,7 +176,7 @@ public class HomePageComponents extends ReusableLibrary {
 	public void invokeApplication() {
 		try {
 
-			driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+			driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 			driver.manage().window().maximize();
 			String applicationURL = dataTable.getData("General_Data", "ApplicationURL");
 			driver.get(applicationURL);
