@@ -1228,7 +1228,7 @@ public class CommonFunctions extends ReusableLibrary {
 	public void moveToAnElement(WebElement element, String strObjName) throws Exception {
 		try {
 			WebElement ele = wait.until(ExpectedConditions.visibilityOf(element));
-
+			System.out.println(driver.getCapabilities().getBrowserName().toString());
 			if (ele.isDisplayed()) {
 				Actions action = new Actions(driver.getWebDriver());
 				action.moveToElement(ele).build().perform();

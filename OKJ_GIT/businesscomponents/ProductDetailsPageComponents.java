@@ -5,8 +5,8 @@ import java.time.ZoneId;
 
 import org.openqa.selenium.WebElement;
 
-import supportlibraries.ReusableLibrary;
-import supportlibraries.ScriptHelper;
+import com.cognizant.craft.ReusableLibrary;
+import com.cognizant.craft.ScriptHelper;
 import com.cognizant.framework.Status;
 import com.cognizant.framework.selenium.WebDriverUtil;
 
@@ -45,7 +45,7 @@ public class ProductDetailsPageComponents extends ReusableLibrary {
 				return null;
 			}
 		} catch (Exception e) {
-			report.updateTestLog("Shopping Cart - get page element",
+			report.updateTestLog("Product Details Page - get page element",
 					pageEnum.toString() + " object is not defined or found.", Status.FAIL);
 			return null;
 		}
@@ -63,6 +63,7 @@ public class ProductDetailsPageComponents extends ReusableLibrary {
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.overlayStarReviews), ProductDetailsPageObjects.overlayStarReviews.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnReadReviews), ProductDetailsPageObjects.btnReadReviews.getObjectname());
 		
+			commonFunction.mouseOver(getPageElement(ProductDetailsPageObjects.lblProductPrice), ProductDetailsPageObjects.lblProductPrice.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblAvgRatingNumber), ProductDetailsPageObjects.lblAvgRatingNumber.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblTotalReviews), ProductDetailsPageObjects.lblTotalReviews.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lnkWriteAReview), ProductDetailsPageObjects.lnkWriteAReview.getObjectname());
@@ -122,8 +123,11 @@ public class ProductDetailsPageComponents extends ReusableLibrary {
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.imgBrandIcon), ProductDetailsPageObjects.imgBrandIcon.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblProductTitleOnWhereToBuyOverlay), ProductDetailsPageObjects.lblProductTitleOnWhereToBuyOverlay.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.txtBoxLocationAddress), ProductDetailsPageObjects.txtBoxLocationAddress.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.btnLocationSearch), ProductDetailsPageObjects.txtBoxLocationAddress.getObjectname());
+
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.imgMapOnWhereToBuy), ProductDetailsPageObjects.imgMapOnWhereToBuy.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblOnlineSeller), ProductDetailsPageObjects.lblOnlineSeller.getObjectname());
+			
 			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.btnCloseWhereToBuyOverlay), ProductDetailsPageObjects.btnCloseWhereToBuyOverlay.getObjectname());
 		}catch(Exception e) {
 			report.updateTestLog("Product Details Page - Validate the Where to Buy Overlay",
@@ -161,6 +165,119 @@ public class ProductDetailsPageComponents extends ReusableLibrary {
 			
 		}catch(Exception e) {
 			report.updateTestLog("Product Details Page - Add Product to Cart and Checkout",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateAskAQuestionLink() {
+		try {
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.lnkAskAQuestion), ProductDetailsPageObjects.lnkAskAQuestion.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.txtAreaAskAQuestion), ProductDetailsPageObjects.txtAreaAskAQuestion.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.txtBoxNickName), ProductDetailsPageObjects.txtBoxNickName.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.txtBoxLocation), ProductDetailsPageObjects.txtBoxLocation.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.txtBoxEmail), ProductDetailsPageObjects.txtBoxEmail.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnPostQuestion), ProductDetailsPageObjects.btnPostQuestion.getObjectname());
+		}catch(Exception e) {
+			report.updateTestLog("Product Details Page - Ask a Question section",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateImageSectionArrows() {
+		try {
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.rightArrow), ProductDetailsPageObjects.rightArrow.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.leftArrow), ProductDetailsPageObjects.leftArrow.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.leftArrow), ProductDetailsPageObjects.leftArrow.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.leftArrow), ProductDetailsPageObjects.leftArrow.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.leftArrow), ProductDetailsPageObjects.leftArrow.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.rightArrow), ProductDetailsPageObjects.rightArrow.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.rightArrow), ProductDetailsPageObjects.rightArrow.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.rightArrow), ProductDetailsPageObjects.rightArrow.getObjectname());
+		}catch(Exception e) {
+			report.updateTestLog("Product Details Page - Image section",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateViewAllProductsButton() {
+		try {
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnViewAllProducts), ProductDetailsPageObjects.btnViewAllProducts.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.btnViewAllProducts), ProductDetailsPageObjects.btnViewAllProducts.getObjectname());
+			if (driver.getCurrentUrl().contains("/accessories-and-parts")) {
+				report.updateTestLog("Verify View All Products link - Product Details Page",
+						"User is successfully Navigated to Accessories & Parts Page", Status.PASS);
+			} else {
+				report.updateTestLog("Verify View All Products link - Product Details Page",
+						"User is NOT Navigated to Accessories & Parts Page", Status.FAIL);
+			}
+		}catch(Exception e) {
+			report.updateTestLog("Product Details Page - View All Products validation",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateYouMightAlsoLikeSectionProducts() {
+		try {
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblYouMightAlsoLike), ProductDetailsPageObjects.lblYouMightAlsoLike.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.firstProduct), ProductDetailsPageObjects.firstProduct.getObjectname());
+			if (commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnAddToCart), ProductDetailsPageObjects.btnAddToCart.getObjectname())) {
+				report.updateTestLog("Verify You might also like section - Product 1",
+						"User is successfully Navigated to Product 1 of You might also like Section", Status.PASS);
+			} else {
+				report.updateTestLog("Verify You might also like section - Product 1",
+						"User is NOT Navigated to Product 1 of You might also like Section", Status.FAIL);
+			}
+			driver.navigate().back();
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.secondproduct), ProductDetailsPageObjects.secondproduct.getObjectname());
+			if (commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnAddToCart), ProductDetailsPageObjects.btnAddToCart.getObjectname())) {
+				report.updateTestLog("Verify You might also like section - Product 2",
+						"User is successfully Navigated to Product 2 of You might also like Section", Status.PASS);
+			} else {
+				report.updateTestLog("Verify You might also like section - Product 2",
+						"User is NOT Navigated to Product 2 of You might also like Section", Status.FAIL);
+			}
+			driver.navigate().back();
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.thirdProduct), ProductDetailsPageObjects.thirdProduct.getObjectname());
+			if (commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnAddToCart), ProductDetailsPageObjects.btnAddToCart.getObjectname())) {
+				report.updateTestLog("Verify You might also like section - Product 3",
+					"User is successfully Navigated to Product 3 of You might also like Section", Status.PASS);
+			} else {
+				report.updateTestLog("Verify You might also like section - Product 3",
+						"User is NOT Navigated to Product 3 of You might also like Section", Status.FAIL);
+			}
+		}catch(Exception e) {
+			report.updateTestLog("Product Details Page - You Might Also Like Section",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateComingSoonProduct() {
+		try {
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblProductTitle), ProductDetailsPageObjects.lblProductTitle.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.imgProductImage), ProductDetailsPageObjects.imgProductImage.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblProductPrice), ProductDetailsPageObjects.lblProductPrice.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnProductStarRating), ProductDetailsPageObjects.btnProductStarRating.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lnkWriteAReview), ProductDetailsPageObjects.lnkWriteAReview.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lnkAskAQuestion), ProductDetailsPageObjects.lnkAskAQuestion.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.btnPreOrder), ProductDetailsPageObjects.btnPreOrder.getObjectname());
+		}catch(Exception e) {
+			report.updateTestLog("Product Details Page - Coming Soon Product",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateCookingArea() {
+		try {
+			commonFunction.scrollIntoView(getPageElement(ProductDetailsPageObjects.lblCookingArea));
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.lblCookingArea), ProductDetailsPageObjects.lblCookingArea.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.tabCookingArea1), ProductDetailsPageObjects.tabCookingArea1.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.tabCookingArea1AdditionalText), ProductDetailsPageObjects.tabCookingArea1AdditionalText.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.tabCookingArea2), ProductDetailsPageObjects.tabCookingArea2.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.tabCookingArea2AdditionalText), ProductDetailsPageObjects.tabCookingArea2AdditionalText.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductDetailsPageObjects.tabCookingArea3), ProductDetailsPageObjects.tabCookingArea3.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductDetailsPageObjects.tabCookingArea3AdditionalText), ProductDetailsPageObjects.tabCookingArea3AdditionalText.getObjectname());
+		}catch(Exception e) {
+			report.updateTestLog("Product Details Page - Cooking Area",
 					"Something went wrong!" + e.toString(), Status.FAIL);
 		}
 	}

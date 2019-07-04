@@ -28,7 +28,8 @@ public class BrowserStackDriverFactory {
 	 * @param version
 	 *            The browser version to be used for the test execution
 	 * @param browserName
-	 *            The {@link Browser} to be used for the test execution
+	 *            The 
+	 *            {@link Browser} to be used for the test execution
 	 * @param BrowserStackURL
 	 *            The BrowserStack URL to be used for the test execution
 	 * @return The corresponding {@link RemoteWebDriver} object
@@ -43,9 +44,11 @@ public class BrowserStackDriverFactory {
 		desiredCapabilities.setCapability("browser_version", browserVersion);
 		desiredCapabilities.setCapability("browser", browser);
 		//desiredCapabilities.setCapability("screen-resolution","800x600");
+		if(browser.toString().toLowerCase().contains("chrome")) {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--start-maximized");
 		desiredCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
+		}
 		try {
 			driver = new RemoteWebDriver(new URL(browserStackURL), desiredCapabilities);
 		} catch (MalformedURLException e) {

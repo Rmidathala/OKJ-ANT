@@ -12,6 +12,7 @@ public enum Browser {
 	INTERNET_EXPLORER("internet explorer"),
 	OPERA("opera"),
 	SAFARI("safari"),
+	IE("IE"),
 	/**
 	 * The native browser on the device (for e.g., native Android browser)
 	 */

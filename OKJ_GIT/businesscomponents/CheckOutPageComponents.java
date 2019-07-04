@@ -3,15 +3,17 @@ package businesscomponents;
 import java.time.LocalTime;
 import java.time.ZoneId;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import supportlibraries.ReusableLibrary;
-import supportlibraries.ScriptHelper;
+import com.cognizant.craft.ReusableLibrary;
+import com.cognizant.craft.ScriptHelper;
 import com.cognizant.framework.Status;
 import com.cognizant.framework.selenium.WebDriverUtil;
 
 import componentgroups.CommonFunctions;
 import pages.CheckOutPageObjects;
+import pages.ShoppingCartPageObjects;
 
 public class CheckOutPageComponents extends ReusableLibrary {
 
@@ -46,6 +48,26 @@ public class CheckOutPageComponents extends ReusableLibrary {
 			}
 		} catch (Exception e) {
 			report.updateTestLog("Checkout Page - get page element",
+					pageEnum.toString() + " object is not defined or found.", Status.FAIL);
+			return null;
+		}
+	}
+	
+	private WebElement getPageElement(ShoppingCartPageObjects pageEnum) {
+		WebElement element;
+		try {
+			element = commonFunction.getElementByProperty(pageEnum.getProperty(), pageEnum.getLocatorType().toString(),
+					true);
+			if (element != null) {
+				System.out.println("Found the element: " + pageEnum.getObjectname());
+			return element;
+			}
+			else {
+				System.out.println("Element Not Found: "+pageEnum.getObjectname());
+				return null;
+			}
+		} catch (Exception e) {
+			report.updateTestLog("Shopping Cart - get page element",
 					pageEnum.toString() + " object is not defined or found.", Status.FAIL);
 			return null;
 		}
@@ -149,7 +171,7 @@ public class CheckOutPageComponents extends ReusableLibrary {
 			String state =dataTable.getData("General_Data", "State");
 			String zip = dataTable.getData("General_Data","ZipCode");
 			String phone = dataTable.getData("General_Data", "PhoneNumber");
-			
+			webdriverutil.waitUntilPageReadyStateComplete(20);
 			Thread.sleep(3000);
 			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxEmailAddress), eamilAddress, CheckOutPageObjects.txtBoxEmailAddress.getObjectname());	
 			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxFirstName), firstName, CheckOutPageObjects.txtBoxFirstName.getObjectname());
@@ -159,7 +181,7 @@ public class CheckOutPageComponents extends ReusableLibrary {
 			commonFunction.selectAnyElement(getPageElement(CheckOutPageObjects.drpDownStateProvince), state, CheckOutPageObjects.drpDownStateProvince.getObjectname());
 			
 			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxZipPostelCode), zip, CheckOutPageObjects.txtBoxZipPostelCode.getObjectname());
-			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxPhoneNumber), phone, CheckOutPageObjects.txtBoxPhoneNumber.getObjectname());
+			commonFunction.clearAndEnterTextTabOut(getPageElement(CheckOutPageObjects.txtBoxPhoneNumber), phone, CheckOutPageObjects.txtBoxPhoneNumber.getObjectname());
 		
 		}catch(Exception e) {
 			report.updateTestLog("CheckOut Page Guest -  Enter valid details",
@@ -175,15 +197,14 @@ public class CheckOutPageComponents extends ReusableLibrary {
 			String state =dataTable.getData("General_Data", "State");
 			String zip = dataTable.getData("General_Data","ZipCode");
 			String phone = dataTable.getData("General_Data", "PhoneNumber");
-			
+			webdriverutil.waitUntilPageReadyStateComplete(20);
 			Thread.sleep(3000);
-			
 			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxStreetAddressLine1), streetAddr, CheckOutPageObjects.txtBoxStreetAddressLine1.getObjectname());
 			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxCity), city, CheckOutPageObjects.txtBoxCity.getObjectname());
 			commonFunction.selectAnyElement(getPageElement(CheckOutPageObjects.drpDownStateProvince), state, CheckOutPageObjects.drpDownStateProvince.getObjectname());
 			
 			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxZipPostelCode), zip, CheckOutPageObjects.txtBoxZipPostelCode.getObjectname());
-			commonFunction.clearAndEnterText(getPageElement(CheckOutPageObjects.txtBoxPhoneNumber), phone, CheckOutPageObjects.txtBoxPhoneNumber.getObjectname());
+			commonFunction.clearAndEnterTextTabOut(getPageElement(CheckOutPageObjects.txtBoxPhoneNumber), phone, CheckOutPageObjects.txtBoxPhoneNumber.getObjectname());
 		
 		}catch(Exception e) {
 			report.updateTestLog("CheckOut Page Guest -  Enter valid details",
@@ -193,11 +214,15 @@ public class CheckOutPageComponents extends ReusableLibrary {
 	
 	public void navigatetoBillingPage() {
 		try {
-			commonFunction.clickIfElementPresent(getPageElement(CheckOutPageObjects.btnContinueToBilling), CheckOutPageObjects.btnContinueToBilling.getObjectname());
+			//commonFunction.scrollIntoView(getPageElement(CheckOutPageObjects.btnContinueToBilling));
+			commonFunction.clickIfElementPresentJavaScript(getPageElement(CheckOutPageObjects.btnContinueToBilling), CheckOutPageObjects.btnContinueToBilling.getObjectname());
+			if(webdriverutil.objectExists(By.xpath(CheckOutPageObjects.btnConfirmAddress.getProperty()))) {
+				commonFunction.clickIfElementPresentJavaScript(getPageElement(CheckOutPageObjects.btnConfirmAddress), CheckOutPageObjects.btnConfirmAddress.getObjectname());
+			}
 			if(commonFunction.verifyIfElementIsPresent(getPageElement(CheckOutPageObjects.lblBillingInformationAfterContinueBilling), CheckOutPageObjects.lblBillingInformationAfterContinueBilling.getObjectname())) {
-				report.updateTestLog("Verify user navigated to Billing Page", "User is successfully Navigated to Billing Page", Status.PASS);
+				report.updateTestLog("Verify user navigated to Billing/Payment Page", "User is successfully Navigated to Billing Page", Status.PASS);
 			}else {
-				report.updateTestLog("Verify user navigated to Billing Page", "User is NOT Navigated to Billing Page", Status.FAIL);
+				report.updateTestLog("Verify user navigated to Billing/Payment Page", "User is NOT Navigated to Billing Page", Status.FAIL);
 			}
 		}catch(Exception e) {
 			report.updateTestLog("CheckOut Page Guest -  Navigate to Billing Page",
@@ -238,6 +263,69 @@ public class CheckOutPageComponents extends ReusableLibrary {
 		}catch(Exception e) {
 			report.updateTestLog("CheckOut Page Guest -  Enter valid details and Place Order",
 					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateShippingAndTaxOnQuantityChange() {
+		try {
+			commonFunction.clickIfElementPresentJavaScript(getPageElement(CheckOutPageObjects.lnkEditCart), CheckOutPageObjects.lnkEditCart.getObjectname());
+			if(commonFunction.verifyIfElementIsPresent(getPageElement(ShoppingCartPageObjects.txtShoppingCartTitle), ShoppingCartPageObjects.txtShoppingCartTitle.getObjectname())) {
+				report.updateTestLog("Verify user is navigated to Shopping Cart Page", "User is successfully navigated to Shopping Cart Page", Status.PASS);
+			}else {
+				report.updateTestLog("Verify user is navigated to Shopping Cart Page", "User is NOT navigated to Shopping Cart Page", Status.FAIL);
+			}
+			ShoppingCartPageComponents shoppingCartpage = new ShoppingCartPageComponents(scriptHelper);
+			shoppingCartpage.upateQuantityAndValidateChangeInPrice();
+			double cartSubTotal = shoppingCartpage.getCartSubTotal();
+			double cartTax = shoppingCartpage.getCartTaxValue();
+			double checkoutSubTotal =Double.parseDouble(commonFunction.getTextFromElement(getPageElement(CheckOutPageObjects.amtCartSubTotal)).substring(1).replace(",", ""));
+			double checkoutTax = Double.parseDouble(commonFunction.getTextFromElement(getPageElement(CheckOutPageObjects.amtCartTax)).substring(1).replace(",", ""));
+			if(cartSubTotal==checkoutSubTotal && cartTax==checkoutTax) {
+				report.updateTestLog("Verify Cart Sub Total and Shipping Tax are updated as per the change in Quantity", "Product Sub Total and Shipping Tax are updated as per the Change in quantity", Status.PASS);
+			}else {
+				report.updateTestLog("Verify Cart Sub Total and Shipping Tax are updated as per the change in Quantity", "Product Sub Total and Shipping Tax are NOT updated as per the Change in quantity", Status.FAIL);
+			}
+		
+		}catch(Exception e) {
+			report.updateTestLog("Validate Shipping and Tax on Quantity Change",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateAddressPopulatedRegisteredUser() {
+		try {
+			String expectedPopulatedAddr = dataTable.getData("General_Data","PopulatedAddress");
+			String expectedPhoneNumber = dataTable.getData("General_Data","PopulatedPhoneNumber");
+			if(commonFunction.isElementPresentContainsText(getPageElement(CheckOutPageObjects.txtPopulatedAddress), CheckOutPageObjects.txtPopulatedAddress.getObjectname(), expectedPopulatedAddr)) {
+				report.updateTestLog("Verify Addresses should be prefilled as per the addresses eneterd by the user during sign up process", "Addresses are prefilled as per the addresses eneterd by the user during sign up process", Status.PASS);
+			}else {
+				report.updateTestLog("Verify Addresses should be prefilled as per the addresses eneterd by the user during sign up process", "Addresses are NOT prefilled as per the addresses eneterd by the user during sign up process", Status.FAIL);
+			}
+			commonFunction.isElementPresentContainsText(getPageElement(CheckOutPageObjects.txtPopulatedAddress), CheckOutPageObjects.txtPopulatedAddress.getObjectname(), expectedPhoneNumber);
+		}catch(Exception e) {
+			report.updateTestLog("Validate Address Populated for Registered User with Address",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
+	
+	public void validateUserNavigationToAddNewAddress() {
+		try {
+			commonFunction.clickIfElementPresent(getPageElement(CheckOutPageObjects.btnNewAddress), CheckOutPageObjects.btnNewAddress.getObjectname());
+			if(commonFunction.isElementPresentContainsText(getPageElement(CheckOutPageObjects.lblAddNewAddr), CheckOutPageObjects.lblAddNewAddr.getObjectname(), "Add New Address")) {
+				report.updateTestLog("Verify user is navigated to Add new Address Page", "User is successfully navigated to Add New Address Page", Status.PASS);
+			}else {
+				report.updateTestLog("Verify user is navigated to Add new Address Page", "User is NOT navigated to Add New Address Page", Status.FAIL);
+			}
+		}catch(Exception e) {
+			
+		}
+	}
+	
+	public void validatePaymentDetailsPage() {
+		try {
+			
+		}catch(Exception e) {
+			
 		}
 	}
 }

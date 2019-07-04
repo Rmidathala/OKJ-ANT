@@ -3,8 +3,8 @@ package businesscomponents;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import supportlibraries.ReusableLibrary;
-import supportlibraries.ScriptHelper;
+import com.cognizant.craft.ReusableLibrary;
+import com.cognizant.craft.ScriptHelper;
 import com.cognizant.framework.Status;
 import com.cognizant.framework.selenium.WebDriverUtil;
 
@@ -51,6 +51,7 @@ public class ProductListingPageComponents extends ReusableLibrary {
 			
 			webdriverutil.waitUntilPageReadyStateComplete(30);
 			// Validate the if the elements are displayed in product listing page
+			commonFunction.scrollIntoView(getPageElement(ProductListingPageObjects.itmFirstProduct));
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.itmFirstProduct),
 					ProductListingPageObjects.itmFirstProduct.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.firstProductTitle),
@@ -86,10 +87,10 @@ public class ProductListingPageComponents extends ReusableLibrary {
 			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.btnFilter),
 					ProductListingPageObjects.btnFilter.getObjectname());
 
-			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.expandColor),
-					ProductListingPageObjects.expandColor.getObjectname());
-			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.firstColorOption),
-					ProductListingPageObjects.firstColorOption.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.expandCategory),
+					ProductListingPageObjects.expandCategory.getObjectname());
+			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.firstCategoryOption),
+					ProductListingPageObjects.firstCategoryOption.getObjectname());
 			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.btnApply),
 					ProductListingPageObjects.btnApply.getObjectname());
 
@@ -146,4 +147,24 @@ public class ProductListingPageComponents extends ReusableLibrary {
 		}
 	}
 
+	public void validateProductFilterSection() {
+		try {
+			commonFunction.scrollIntoView(getPageElement(ProductListingPageObjects.btnFilter));
+			commonFunction.clickIfElementPresent(getPageElement(ProductListingPageObjects.btnFilter),
+					ProductListingPageObjects.btnFilter.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.expandCategory),
+					ProductListingPageObjects.expandCategory.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.expandColor),
+					ProductListingPageObjects.expandColor.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.expandPrice),
+					ProductListingPageObjects.expandPrice.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.lnkCancel),
+					ProductListingPageObjects.lnkCancel.getObjectname());
+			commonFunction.verifyIfElementIsPresent(getPageElement(ProductListingPageObjects.btnApply),
+					ProductListingPageObjects.btnApply.getObjectname());
+		}catch(Exception e) {
+			report.updateTestLog("Product Listing Page - validate Filter Section",
+					"Something went wrong!" + e.toString(), Status.FAIL);
+		}
+	}
 }
