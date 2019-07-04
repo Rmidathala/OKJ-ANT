@@ -10,8 +10,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import com.cognizant.craft.ReusableLibrary;
-import com.cognizant.craft.ScriptHelper;
+import supportlibraries.ReusableLibrary;
+import supportlibraries.ScriptHelper;
 import com.cognizant.framework.Status;
 import com.cognizant.framework.selenium.WebDriverUtil;
 
@@ -471,7 +471,7 @@ public class HomePageComponents extends ReusableLibrary {
 			commonFunction.verifyIfElementIsPresent(getPageElement(HomePageObjects.txtSearchResults),
 					HomePageObjects.txtSearchResults.getObjectname());
 			commonFunction.isElementPresentContainsText(getPageElement(HomePageObjects.txtSearchResults),
-					HomePageObjects.txtSearchResults.getObjectname(), "“" + searchText + "”");
+					HomePageObjects.txtSearchResults.getObjectname(), "â€œ" + searchText + "â€�");
 			commonFunction.verifyIfElementIsPresent(getPageElement(HomePageObjects.lblProducts),
 					HomePageObjects.lblProducts.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(HomePageObjects.lnkRecipes),
@@ -496,7 +496,7 @@ public class HomePageComponents extends ReusableLibrary {
 			commonFunction.verifyIfElementIsPresent(getPageElement(HomePageObjects.txtSearchResults),
 					HomePageObjects.txtSearchResults.getObjectname());
 			commonFunction.isElementPresentContainsText(getPageElement(HomePageObjects.txtSearchResults),
-					HomePageObjects.txtSearchResults.getObjectname(), "“" + searchText + "”");
+					HomePageObjects.txtSearchResults.getObjectname(), "â€œ" + searchText + "â€�");
 			commonFunction.verifyIfElementIsPresent(getPageElement(HomePageObjects.lblTrySearchAgain),
 					HomePageObjects.lblTrySearchAgain.getObjectname());
 			commonFunction.verifyIfElementIsPresent(getPageElement(HomePageObjects.txtBoxImLookingFor),

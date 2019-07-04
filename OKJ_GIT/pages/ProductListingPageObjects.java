@@ -15,13 +15,14 @@ public enum ProductListingPageObjects implements PageObjects {
 	
 	firstProductTitle("//div[@class='product-listing__list slider']/a[1]/div/div[2]/h4",XPATH,"First Product Title"),
 	firstProdcutPrice("//div[@class='product-listing__list slider']/a[1]/div/div[2]/div/span/span",XPATH,"First Product Price"),
-	firstProuctStars("//div[@class='product-listing__list slider']/a[1]/div/div[2]/div[3]/a",XPATH,"First Product star rating"),
+	firstProuctStars("(//span[@class='bv_stars_svg_no_wrap'])[1]",XPATH,"First Product star rating"),
 	productsOnProuctListingPage("//div[@class='product-listing__list slider']/a",XPATH,"Products on Product listing Page"),
 	firstProductImg("//div[@class='product-listing__list slider']/a[1]/div/div[1]/img",XPATH,"First Product Image"),
 	btnLoadMore("//a[@class='button button--center']",XPATH,"Load More Button"),
 	
 	expandColor("//span[@class='toolbar-filter--span' and text()='Color']",XPATH,"Expand Color Filter Options"),
-	
+	expandCategory("//span[@class='toolbar-filter--span' and text()='Category']",XPATH,"Expand Category Filter Options"),
+	firstCategoryOption("//span[@class='toolbar-filter--span' and text()='Category']/following::span[2]",XPATH,"First Option under the Cateogry Filter"),
 	firstColorOption("//span[@class='toolbar-filter--span' and text()='Color']/following::span[2]",XPATH,"First Option under the Color filter"),
 	
 	expandPrice("//span[@class='toolbar-filter--span' and text()='Price']",XPATH,"Expand Price Filter Options"),
@@ -30,6 +31,8 @@ public enum ProductListingPageObjects implements PageObjects {
 	
 	btnApply("//div[@class='toolbar-filter__top--apply']",XPATH,"Apply Button in filter"),
 	
+	//Filter section
+	lnkCancel("//div[@class='toolbar-filter__top--cancel']",XPATH,"Product Filter section: Cancel Link"),
 	
 	;
 

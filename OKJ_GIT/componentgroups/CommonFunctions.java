@@ -1,16 +1,19 @@
 package componentgroups;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,12 +22,12 @@ import org.openqa.selenium.interactions.touch.TouchActions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.sikuli.script.Key;
 import org.sikuli.script.Pattern;
 import org.sikuli.script.Screen;
 
 import com.cognizant.framework.Status;
 import com.cognizant.framework.selenium.CraftDriver;
+import com.cognizant.framework.selenium.WebDriverUtil;
 
 import pages.PageObjects;
 
@@ -34,7 +37,7 @@ import supportlibraries.ScriptHelper;
 public class CommonFunctions extends ReusableLibrary {
 
 	WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 30);
-
+	WebDriverUtil webdriverutil = new WebDriverUtil(driver);
 	public CommonFunctions(ScriptHelper scriptHelper) {
 		super(scriptHelper);
 
@@ -57,7 +60,6 @@ public class CommonFunctions extends ReusableLibrary {
 	public WebElement getElementByProperty(String strObjectProperty, String strFindElementType, boolean displayError) {
 		WebElement ele = null;
 		try {
-			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 30);
 			if (strFindElementType.equalsIgnoreCase("CSS")) {
 				try {
 					ele = wait.until(
@@ -129,7 +131,16 @@ public class CommonFunctions extends ReusableLibrary {
 				return ele;
 			}
 
-	
+			/*
+			 * else if (strFindElementType.equalsIgnoreCase("ACCESSIBILITYID")) { try { ele
+			 * = wait .until(ExpectedConditions.visibilityOf(driver.getAppiumDriver().
+			 * findElementByAccessibilityId(strObjectProperty))); } catch (TimeoutException
+			 * t) {
+			 * System.out.println("Did not find the Element within explicit wait time"); }
+			 * return ele;
+			 * 
+			 * }
+			 */
 
 		} catch (org.openqa.selenium.NoSuchElementException nsee) {
 			if (displayError) {
@@ -219,7 +230,11 @@ public class CommonFunctions extends ReusableLibrary {
 
 		// WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 20);
 		WebElement element = wait.until(ExpectedConditions.visibilityOf(elemToUpdate));
-
+		/*
+		 * if(driver.getCapabilities().getBrowserName().contains("IE")) { try {
+		 * scrollIntoView(element); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } }
+		 */
 		if (!strValueToUpdate.trim().equalsIgnoreCase("IGNORE")) {
 			try {
 				if (element.isDisplayed() && element.isEnabled()) {
@@ -357,7 +372,14 @@ public class CommonFunctions extends ReusableLibrary {
 
 		// WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 20);
 		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(elementToSelect));
-
+		if(driver.getCapabilities().getBrowserName().contains("IE")) {
+			try {
+				scrollIntoView(element);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		String strStateToReport = " ";
 		boolean blnValueToSelect = true;
 		if (!(strValueToSelect.trim().equalsIgnoreCase("IGNORE"))) {
@@ -519,12 +541,16 @@ public class CommonFunctions extends ReusableLibrary {
 	public boolean clickIfElementPresent(WebElement element, String strObjName) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 50);
-
-			if (isElementPresentVerification(wait.until(ExpectedConditions.elementToBeClickable(element)),
+			WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 30);
+			/*
+			 * if(driver.getCapabilities().getBrowserName().contains("IE")) { try {
+			 * scrollIntoView(element); } catch (InterruptedException e) { // TODO
+			 * Auto-generated catch block e.printStackTrace(); } }
+			 */
+			if (isElementPresentVerification(wait.ignoring(StaleElementReferenceException.class).until(ExpectedConditions.elementToBeClickable(element)),
 					strObjName)) {
-				wait.until(ExpectedConditions.elementToBeClickable(element)).click();
-				Thread.sleep(1000);
+				wait.ignoring(StaleElementReferenceException.class).until(ExpectedConditions.elementToBeClickable(element)).click();
+				//Thread.sleep(1000);
 				report.updateTestLog("Click '" + strObjName + "'", "'" + strObjName + "'" + " is present and clicked",
 						Status.PASS);
 				return true;
@@ -645,6 +671,8 @@ public class CommonFunctions extends ReusableLibrary {
 		try {
 			((JavascriptExecutor) driver.getWebDriver()).executeScript("arguments[0].scrollIntoView(true);",
 					wait.until(ExpectedConditions.visibilityOf(element)));
+			report.updateTestLog("Scroll To the Element", "Scroll to the element completed" ,
+					Status.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -798,6 +826,7 @@ public class CommonFunctions extends ReusableLibrary {
 			String StrObjName, String textToVerify, String attribute) throws IOException {
 
 		try {
+			
 			if (isElementPresentVerification(strObjectProperty, strFindElementType, StrObjName)) {
 				getElementByProperty(strObjectProperty, strFindElementType).getAttribute(attribute)
 						.contains(textToVerify);
@@ -818,8 +847,17 @@ public class CommonFunctions extends ReusableLibrary {
 
 	public boolean isElementPresentContainsText(String strObjectProperty, String strFindElementType, String StrObjName,
 			String textToVerify) throws IOException {
-
+		
 		try {
+			WebElement ele =getElementByProperty(strObjectProperty, strFindElementType);
+			if(driver.getCapabilities().getBrowserName().contains("IE")) {
+				try {
+					scrollIntoView(ele);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			if (isElementPresentVerification(strObjectProperty, strFindElementType, StrObjName)) {
 				getElementByProperty(strObjectProperty, strFindElementType).getText().contains(textToVerify);
 				report.updateTestLog("The Element(" + StrObjName + ") is present and Contains the text", textToVerify,
@@ -949,7 +987,11 @@ public class CommonFunctions extends ReusableLibrary {
 
 		// WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 20);
 		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(elementToSelect));
-
+		/*
+		 * if(driver.getCapabilities().getBrowserName().contains("IE")) { try {
+		 * scrollIntoView(element); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } }
+		 */
 		if (!(strValueToSelect.trim().equalsIgnoreCase("IGNORE"))) {
 			if (element.isEnabled()) {
 				// element.click();
@@ -960,6 +1002,50 @@ public class CommonFunctions extends ReusableLibrary {
 				} catch (InterruptedException e) {
 				}
 				comSelElement.selectByVisibleText(strValueToSelect);
+
+				report.updateTestLog("Verify if the Element(" + strObjName + ") is present and selected",
+						strObjName + " value : '" + strValueToSelect + "' is selected", Status.PASS);
+			} else {
+				report.updateTestLog("Verify if the Element(" + strObjName + ") is present and selected",
+						strObjName + " object is not enabled", Status.FAIL);
+			}
+		}
+	}
+
+	/***
+	 ************************************************************* 
+	 * Method to select an option directly from combo box/list box
+	 * 
+	 * @param elementToSelect
+	 *            The {@link elementToSelect} element to be verified
+	 * @param valueToSelect
+	 *            The {@link strElemStateToVerify} describes the state to be
+	 *            verified which can be either one of ENABLED/SELECTED/VALUE
+	 * @param strObjName
+	 *            The {@link strObjName} is used for identifying the object used for
+	 *            reporting purposes.
+	 * @return A boolean value indicating if selecting an option is done.
+	 ************************************************************* 
+	 */
+	public void selectAnyElementByValue(WebElement elementToSelect, String strValueToSelect, String strObjName) {
+
+		// WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 20);
+		WebElement element = wait.until(ExpectedConditions.elementToBeClickable(elementToSelect));
+		/*
+		 * if(driver.getCapabilities().getBrowserName().contains("IE")) { try {
+		 * scrollIntoView(element); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } }
+		 */
+		if (!(strValueToSelect.trim().equalsIgnoreCase("IGNORE"))) {
+			if (element.isEnabled()) {
+				// element.click();
+
+				Select comSelElement = new Select(element);
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+				}
+				comSelElement.selectByValue(strValueToSelect);
 
 				report.updateTestLog("Verify if the Element(" + strObjName + ") is present and selected",
 						strObjName + " value : '" + strValueToSelect + "' is selected", Status.DONE);
@@ -987,6 +1073,11 @@ public class CommonFunctions extends ReusableLibrary {
 	public void selectAnyElement(WebElement elementToSelect, int indexToSelect, String strObjName) {
 
 		WebElement element = wait.until(ExpectedConditions.visibilityOf(elementToSelect));
+		/*
+		 * if(driver.getCapabilities().getBrowserName().contains("IE")) { try {
+		 * scrollIntoView(element); } catch (InterruptedException e) { // TODO
+		 * Auto-generated catch block e.printStackTrace(); } }
+		 */
 		if (indexToSelect > -1) {
 			if (element.isEnabled()) {
 				element.click();
@@ -1054,14 +1145,11 @@ public class CommonFunctions extends ReusableLibrary {
 
 	public boolean isElementPresentContainsText(WebElement element, String StrObjName, String textToVerify)
 			throws IOException {
-
 		try {
-			// WebDriverWait wait = new WebDriverWait(driver.getWebDriver(), 20);
-
 			if (isElementPresentVerification(wait.until(ExpectedConditions.visibilityOf(element)), StrObjName)) {
 				if (wait.until(ExpectedConditions.visibilityOf(element)).getText().contains(textToVerify)) {
-					report.updateTestLog("The Element(" + StrObjName + ") is present and Contains the text",
-							textToVerify, Status.PASS);
+					report.updateTestLog("The Element(" + StrObjName + ") is present and Contains the text:"+textToVerify,
+							"Successfully verified the presence of text: "+textToVerify, Status.PASS);
 				}
 				return true;
 			} else {
@@ -1228,10 +1316,11 @@ public class CommonFunctions extends ReusableLibrary {
 	public void moveToAnElement(WebElement element, String strObjName) throws Exception {
 		try {
 			WebElement ele = wait.until(ExpectedConditions.visibilityOf(element));
-			System.out.println(driver.getCapabilities().getBrowserName().toString());
+
 			if (ele.isDisplayed()) {
 				Actions action = new Actions(driver.getWebDriver());
 				action.moveToElement(ele).build().perform();
+
 			} else {
 				report.updateTestLog(("Verify " + strObjName + " element is present"), strObjName + " is NOT displayed",
 						Status.FAIL);
@@ -1300,7 +1389,7 @@ public class CommonFunctions extends ReusableLibrary {
 		try {
 			if (element.isDisplayed()) {
 				System.out.println("The Element is displayed: " + strObjName);
-				JavascriptExecutor executor = (JavascriptExecutor) driver;
+				JavascriptExecutor executor = (JavascriptExecutor) driver.getWebDriver();
 				executor.executeScript("arguments[0].click();", element);
 				Thread.sleep(500);
 				report.updateTestLog("Click '" + strObjName + "'", "'" + strObjName + "'" + " is present and clicked",
@@ -1335,7 +1424,6 @@ public class CommonFunctions extends ReusableLibrary {
 	public boolean verifyIfElementIsPresent(WebElement elementToFind, String objName) {
 
 		try {
-
 			if (elementToFind == null || (!elementToFind.isDisplayed())) {
 				report.updateTestLog(objName, objName + " element is not displayed", Status.FAIL);
 				return false;
@@ -1580,12 +1668,39 @@ public class CommonFunctions extends ReusableLibrary {
 		report.updateTestLog("Mouse over the element: "+objectName, "Mouse over the element is succuess", Status.DONE);
 	}
 	
-	public void hitEnterkey(WebElement ele)
-	{
+	public void hitEnterKey(WebElement ele, String objectName) {
+		if(driver.getTestParameters().getExecutionMode().toString().equalsIgnoreCase("BROWSERSTACK")) {
+		//ele.sendKeys(Keys.ENTER);
+		//ele.sendKeys(Keys.RETURN);
+		Actions action = new Actions(driver.getWebDriver());
+		action.sendKeys(Keys.RETURN);
+		action.build().perform();
+		}else {
+			Robot robot;
+			try {
+				robot = new Robot();
+				robot.keyPress(KeyEvent.VK_ENTER);
+				robot.keyRelease(KeyEvent.VK_ENTER);
+			} catch (AWTException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		report.updateTestLog("Hit enter on the Text Box"+objectName, "Enter Key was hit successfully", Status.DONE);
+		
+	}
+		
+	public void selectDropDownvalue(WebElement ele1, String property, String objectName, String value) {
 		try {
-			ele.sendKeys(Key.ENTER);
+			System.out.println("Selecting the drop down value for: "+objectName);
+			ele1.click();
+			String finalxpath = property+value+"']";
+			driver.findElement(By.xpath(finalxpath)).click();
+			report.updateTestLog(objectName+ " Dropdown value select", objectName+ " Drop down value selected with value:"+value, Status.PASS);
 		}catch(Exception e) {
-			System.out.println("Exception - "+e.getMessage());
+			report.updateTestLog("Select Drop Down value",
+					"Something really went wrong! :" + e.toString(), Status.FAIL);
 		}
 	}
 }

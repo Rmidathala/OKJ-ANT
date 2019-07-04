@@ -17,7 +17,7 @@ public enum ProductDetailsPageObjects implements PageObjects {
 	lnkWriteAReview("//button[@class='bv_button_buttonMinimalist ' and @id='WAR']",XPATH,"Write a review link"),
 	lnkAskAQuestion("//button[@class='bv_button_buttonMinimalist ' and @id='AAQ']",XPATH,"Ask a Question link"),
 	
-	btnAddToCart("//button[@id='product-addtocart-button']",XPATH,"Add to cart button"),
+	btnAddToCart("product-addtocart-button",ID,"Add to cart button"),
 	btnWhereToBuy("//div[@class='price-spider']/div",XPATH,"Where To Buy button"),
 	txtProductInfoOverview("//div[@class='body-copy product-info__overview']/div/p",XPATH,"Product Info Overview"),
 	
@@ -49,9 +49,40 @@ public enum ProductDetailsPageObjects implements PageObjects {
 	imgMapOnWhereToBuy("//div[@class='ps-map leaflet-container leaflet-fade-anim']",XPATH,"Map on the Where to Buy Model Overlay"),
 	lblOnlineSeller("//div[@class='ps-online-seller-listings ps-float-box']/div[1]",XPATH,"Online Seller list- First Online Store"),
 	btnCloseWhereToBuyOverlay("//div[@class='ps-header-container ps-float-box']/div[@class='ps-lightbox-close']",XPATH,"Close the where to buy Overlay Button"),
-	
+	btnLocationSearch("//div[@class='ps-mag-icon ps-map-location-button']",XPATH,"Location Search Button"),
 	txtBoxQuantity("//input[@id='qty']",XPATH,"Quantity on Product Details Page"),
 	btnUpdateCart("//button[@title='Update Cart']/span",XPATH,"Update Cart Button on Product Details"),
+	
+	
+	// As a Question section
+	txtAreaAskAQuestion("bv-textarea-field-questionsummary",ID,"Product Deatails Page - Ask a Question text Area"),
+	txtBoxNickName("bv-text-field-usernickname",ID,"Product Details Page - Ask a question section - Nick name"),
+	txtBoxLocation("bv-text-field-userlocation",ID,"Product Details Page - Ask a question section - Location text Box"),
+	txtBoxEmail("bv-email-field-hostedauthentication_authenticationemail",ID,"Product Details Page - Ask a question section - Email text Box"),
+	btnPostQuestion("bv-submit-button",NAME,"Product Details page - Ask a question section - Post Question button"),
+	
+	// Image section
+	rightArrow("//div[@class='fotorama__nav-wrap fotorama__nav-wrap--horizontal']/div/div[3]",XPATH,"Product Details Page - Image Section - Right Arrow"),
+	leftArrow("//div[@class='fotorama__nav-wrap fotorama__nav-wrap--horizontal']/div/div[1]",XPATH,"Product Details Page - Image Section - Left Arrow"),
+	
+	
+	// Your might also like products
+	lblYouMightAlsoLike("//h2[@class='product-popular__heading related']",XPATH,"Product Details Page - You Might also like section - label - 'You Might Also Like'"),
+	btnViewAllProducts("//a[@class='button primary button--z-raised']",XPATH,"Product Details Page - You Might also like Section - View All Products Button"),
+	firstProduct("//div[@class='product-popular__list catalog-categories__wrapper']/div[1]",XPATH,"Product Details Page - You might also like Section - Product 1"),
+	secondproduct("//div[@class='product-popular__list catalog-categories__wrapper']/div[2]",XPATH,"Product Details Page - You might also like Section - Product 2"),
+	thirdProduct("//div[@class='product-popular__list catalog-categories__wrapper']/div[3]",XPATH,"Product Details Page - You might also like section - Product 3"),
+	
+	btnPreOrder("//a[@title='Pre-Order']/span",XPATH,"Product Details Page - Pre-Order Button"),
+	
+	//Cooking Area
+	lblCookingArea("//h4[@class='dimensions__capacity-title text-charcoal']",XPATH,"Product Details Page - Cooking Area Label"),
+	tabCookingArea1("//ul[@class='dimensions__tabs']/a[1]",XPATH,"Product Details Page - Cooking Area - Tab 1"),
+	tabCookingArea1AdditionalText("//div[@class='dimensions__image-tabs']/div[1]/div[1]",XPATH,"Product Details Page - Cooking Area  Tab 1- Primary Cooking Space"),
+	tabCookingArea2("//ul[@class='dimensions__tabs']/a[2]",XPATH,"Product Details Page - Cooking Area - Tab 2"),
+	tabCookingArea2AdditionalText("//div[@class='dimensions__image-tabs']/div[2]/div[1]",XPATH,"Product details Page - Tab 2 - Primary Cooking Space (Pictured): "),
+	tabCookingArea3("//ul[@class='dimensions__tabs']/a[3]",XPATH,"Product Details Page - Cooking Area - Tab 3"),
+	tabCookingArea3AdditionalText("//div[@class='dimensions__image-tabs']/div[3]/div[1]",XPATH,"Product details Page - Cooking Area- Tab 3 - Primary Cooking Space (Pictured):"),
 	
 	;
 

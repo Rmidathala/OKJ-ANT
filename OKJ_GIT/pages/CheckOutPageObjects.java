@@ -44,7 +44,7 @@ public enum CheckOutPageObjects implements PageObjects {
 	
 	lblBillingInformation("//h2[text()='Billing Information']",XPATH,"Checkout Page: Billing Information Label"),
 	lblCartNoOfItems("//h2[@class='checkout__title checkout__title--editable checkout__title--editable-cart']",XPATH,"Checkout Page: Cart # Items label"),
-	lnkEditCart("//h2[@class='checkout__title checkout__title--editable checkout__title--editable-cart']",XPATH,"Checkout Page: Edit Cart Link"),
+	lnkEditCart("//div[@class='checkout__cart-items']/h2",XPATH,"Checkout Page: Edit Cart Link"),
 	
 	imgProductImg("//div[@class='cart-item__container row']/span/img",XPATH,"Checkout Page: Cart Item Product Image"),
 	lblProductNameInCart("//div[@class='cart-item__info__name']",XPATH,"Checkout Page: Product Name In Cart"),
@@ -62,6 +62,7 @@ public enum CheckOutPageObjects implements PageObjects {
 	amtCartSubTotal("//tr[@class='totals sub']/td/span",XPATH,"Checkout Page: Cart Subtotal in $"),
 	lblShipping("//tr[@class='totals shipping excl']/th/span[1]",XPATH,"Checkout Page: Shipping lable in Your Order section"),
 	lblShippingMethodYourOrderSection("//tr[@class='totals shipping excl']/th/span[2]",XPATH,"Checkout Page: Shipping Method label in Your Order section"),
+	amtCartTax("//tr[@class='totals shipping excl']/td/span",XPATH,"Checkout Page : Shipping Tax Price"),
 	lblOrderTotal("//tr[@class='grand totals']/th/strong",XPATH,"Checkout Page: Order Total"),
 	amtOrderTotal("//tr[@class='grand totals']/td/strong/span",XPATH,"Checkout Page: Order total in $"),
 	
@@ -100,6 +101,18 @@ public enum CheckOutPageObjects implements PageObjects {
 	txtBoxCVN("//input[@id='chcybersource_cc_cid']",XPATH,"Billing Page: CVN Input text Box"),
 	
 	btnPlaceOrder("//h2[@class='checkout__title checkout__title--editable checkout__title--editable-cart']/preceding::button[2]",XPATH,"Billing Page: Place Order Button"),
+	
+	txtPopulatedAddress("//div[@class='shipping-address-item selected-item']",XPATH,"Checkout Page - Populated Address"),
+	lnkPopulatedPhoneNumber("//div[@class='shipping-address-item selected-item']/a",XPATH,"Checkout Page - Populated Phone Number"),
+	btnNewAddress("//a[@class='button action new-address']",XPATH,"Checkout Page - New Address Button"),
+	lblAddNewAddr("//h4[@class='account__section-title text-charcoal text-left']",XPATH,"New Address- Add new address label"),
+	btnConfirmAddress("//button[@class='action-primary']",XPATH,"Checkout Page - Confirm Address button"),
+	
+	//Paypal page
+	iconCharbroiIcon("//div[@class='headerWrapper']/img",XPATH,"Pay Pal Page- Charbroil Icon"),
+	amtTotalAmount("//format-currency[@class='formatCurrency ng-isolate-scope']/span",XPATH,"Pay Pal Page - Total Amount in $"),
+	
+	//
 	;
 
 	String strProperty = "";

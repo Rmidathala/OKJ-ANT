@@ -21,7 +21,6 @@ public enum ShoppingCartPageObjects implements PageObjects {
 	txtBoxPromoCode("//input[@id='coupon_code']",XPATH,"Promo Code Text Box on Shopping Cart Page"),
 	btnApply("//button[@class='action apply button--secondary button']",XPATH,"Apply Promo code button on shopping cart page"),
 	titleYourOrder("cart-summary__title",CLASSNAME,"Your Order title on Order section on Shopping Cart Page"),
-	titleEstimatedShippingTax("block-shipping-heading",ID,"Estimated Shipping and Tax lable/title"),
 	txtSubTotal("//tr[@class='totals sub']/th",XPATH,"Sub Total label"),
 	txtSubTotalPrice("//tr[@class='totals sub']/td/span",XPATH,"Sub total Price"),
 	txtShipping("//tr[@class='totals shipping excl']/th",XPATH,"Shipping Title/Label"),
@@ -33,15 +32,30 @@ public enum ShoppingCartPageObjects implements PageObjects {
 	
 	txtUpdateMessageFromPDP("//div[@data-bind='html: message.text']",XPATH,"Message after updating Product from Product Details Page"),
 	
-	
+	//Empty Shipping cart
+	lnkGoBack("//a[text()='Go back.']",XPATH,"Empty Shipping Cart Page - Go Back Link"),
+	lblShippingCart0Items("//h1[@class='cart__title']",XPATH,"Empty Shipping Cart Page - Heading - Shipping Cart (0 Items)"),
 	// Help Section
 	txtNeedSomethingElse("support-summary-cart__title",CLASSNAME,"'Need Something Else?' lable - Suppport on Shopping Cart Page"),
-	lnkShopSmokersGrills("//ul[@class='support-summary-cart__links']/li[1]",XPATH,"Support Section - Link Shop Smokers & Grills"),
-	lnkShopAccessories("//ul[@class='support-summary-cart__links']/li[2]",XPATH,"Support Section - Shop Accessories"),
-	lnkShippingPolicy("//ul[@class='support-summary-cart__links']/li[3]",XPATH,"Support Section - link Shipping Policy"),
-	lnkReturnPolicy("//ul[@class='support-summary-cart__links']/li[4]",XPATH,"Support Section - Link Return Policy"),
+	lnkShopSmokersGrills("//ul[@class='support-summary-cart__links']/li[1]/a",XPATH,"Support Section - Link Shop Smokers & Grills"),
+	lnkShopAccessories("//ul[@class='support-summary-cart__links']/li[2]/a",XPATH,"Support Section - Shop Accessories"),
+	lnkShippingPolicy("//ul[@class='support-summary-cart__links']/li[3]/a",XPATH,"Support Section - link Shipping Policy"),
+	lnkReturnPolicy("//ul[@class='support-summary-cart__links']/li[4]/a",XPATH,"Support Section - Link Return Policy"),
 	lnkPhoneNumber("//a[@class='support-summary-cart__contact__phone link link--with-carat']",XPATH,"Support Section - link for Phone Number"),
 	lnkLiveChat("//a[@class='support-summary-cart__contact__chat link link--with-carat']",XPATH,"Support Section - link for Live Chat"),
+	
+	//Paypal page
+	iconCharbroiIcon("//div[@class='headerWrapper']/img",XPATH,"Pay Pal Page- Charbroil Icon"),
+	amtTotalAmount("//format-currency[@class='formatCurrency ng-isolate-scope']/span",XPATH,"Pay Pal Page - Total Amount in $"),
+	
+	// Estimate and Shipping Tax section
+	titleEstimatedShippingTax("block-shipping-heading",ID,"Estimated Shipping and Tax lable/title"),
+	dropDownCountry("country_id",NAME,"Shipping Cart Page - Estimate and Shipping Tax Section - Country drop down"),
+	dropDownState("region_id",NAME,"Shipping Cart Page - Estimate and Shipping Tax Section - State Drop Down"),
+	txtBoxZipCode("postcode",NAME,"Shipping Cart Page - Estimate and Shipping Tax Section - Zip Code Text Box"),
+	
+	lblTax("//tr[@class='totals-tax']/th",XPATH,"Shipping Cart Page - Tax Label "),
+	taxValue("//tr[@class='totals-tax']/td",XPATH,"Shipping Cart Page - Tax doller"),
 	;
 
 	String strProperty = "";
